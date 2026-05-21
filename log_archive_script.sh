@@ -21,5 +21,12 @@ sudo tar -czf "${ARCHIVE_DIR}/${ARCHIVE_NAME}" "$LOG_DIR"
 # --- Empty each log file (truncate instead of delete) ------------------------------
 # Deleting breaks apps that are actively writing to those files
 # Truncating empties them but keeps the file in place 
+find "$LOG_DIR" -maxdepth 1 -type f -name "*.log" | while read -r logfile; do
+  sudo truncate -s 0 "$logfile"
+  done
 
 # --- Record what happened and when -------------------------------------------------
+echo "[$(date +"%Y=%m-%d %H:%M:%S")] Archived $LOG_DIR to ${ARCHIVE_DIR}/${ARCHIVE_NAME}" \
+  >> "${ARCHIVE_DIR}/archive_activity.log"
+
+echo "Donr. Archive saved to: ${ARCHIVE_DIR}/${ARCHIVE_NAME}"
